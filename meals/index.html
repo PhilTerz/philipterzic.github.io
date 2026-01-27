@@ -196,7 +196,6 @@
       font-size: 14px;
       font-weight: 600;
       margin-bottom: 8px;
-      padding-right: 90px;
       padding-left: 0;
       line-height: 1.3;
     }
@@ -205,27 +204,6 @@
       padding-left: 24px;
     }
 
-    .badge {
-      position: absolute;
-      top: 14px;
-      right: 14px;
-      font-size: 9px;
-      font-weight: 700;
-      text-transform: uppercase;
-      padding: 5px 10px;
-      border-radius: 12px;
-      letter-spacing: 0.3px;
-    }
-
-    .badge-same-day {
-      background: #4DA6A6;
-      color: white;
-    }
-
-    .badge-day-before {
-      background: #D4A857;
-      color: #1a1a1a;
-    }
 
     .meal-summary {
       font-size: 12px;
@@ -288,19 +266,6 @@
       color: #4DA6A6;
     }
 
-    .btn-view-recipe {
-      background: #f0f0f0;
-      color: #666;
-      border: none;
-      padding: 6px 12px;
-      border-radius: 6px;
-      font-size: 11px;
-      cursor: pointer;
-    }
-
-    .btn-view-recipe:hover {
-      background: #e0e0e0;
-    }
 
     .meal-details {
       max-height: 0;
@@ -345,15 +310,6 @@
       border-radius: 2px;
     }
 
-    .day-before .ingredients h4::before,
-    .day-before .instructions h4::before {
-      background: #D4A857;
-    }
-
-    .day-before .ingredients h4,
-    .day-before .instructions h4 {
-      color: #C4983F;
-    }
 
     .ingredients ul {
       list-style: none;
@@ -414,36 +370,7 @@
       justify-content: center;
     }
 
-    .meal-card.day-before .instructions li::before {
-      background: #D4A857;
-    }
 
-    .close-btn {
-      position: absolute;
-      top: 14px;
-      right: 90px;
-      background: #f0f0f0;
-      border: none;
-      width: 28px;
-      height: 28px;
-      border-radius: 50%;
-      cursor: pointer;
-      font-size: 18px;
-      color: #666;
-      display: none;
-      align-items: center;
-      justify-content: center;
-      transition: all 0.2s;
-    }
-
-    .close-btn:hover {
-      background: #e0e0e0;
-      color: #333;
-    }
-
-    .meal-card.expanded .close-btn {
-      display: flex;
-    }
 
     .tip {
       margin-top: 16px;
@@ -534,9 +461,8 @@
     }
 
     .timing-key {
-      display: grid;
-      grid-template-columns: 1fr 1fr 1fr;
-      gap: 12px;
+      display: flex;
+      justify-content: center;
       background: linear-gradient(135deg, #f5f5f5 0%, #ececec 100%);
       border-radius: 10px;
       padding: 14px 20px;
@@ -568,6 +494,120 @@
 
     .nut-butter-row strong {
       color: #555;
+    }
+
+    /* Fiber Sides Styles */
+    .fiber-sides {
+      background: white;
+      border: 1px solid #E0E0E0;
+      border-radius: 12px;
+      padding: 24px;
+      margin-top: 24px;
+    }
+
+    .fiber-sides h2 {
+      font-size: 14px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 8px;
+      color: #1a1a1a;
+      text-align: center;
+    }
+
+    .fiber-intro {
+      text-align: center;
+      font-size: 13px;
+      color: #666;
+      margin-bottom: 20px;
+    }
+
+    .sides-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+
+    .side-card {
+      background: #F9F7F4;
+      border-radius: 10px;
+      padding: 16px;
+      border-left: 3px solid #6BBF59;
+    }
+
+    .side-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 12px;
+      gap: 8px;
+    }
+
+    .side-card h4 {
+      font-size: 12px;
+      font-weight: 700;
+      color: #2D2D2D;
+      margin: 0;
+    }
+
+    .side-fiber {
+      font-size: 10px;
+      font-weight: 700;
+      background: #6BBF59;
+      color: white;
+      padding: 3px 8px;
+      border-radius: 10px;
+      white-space: nowrap;
+    }
+
+    .side-card ul {
+      list-style: none;
+      font-size: 11px;
+      margin-bottom: 10px;
+    }
+
+    .side-card li {
+      margin-bottom: 6px;
+      color: #555;
+    }
+
+    .side-card li strong {
+      color: #2D2D2D;
+    }
+
+    .side-note {
+      font-size: 10px;
+      color: #888;
+      font-style: italic;
+      margin: 0;
+      padding-top: 8px;
+      border-top: 1px solid #E8E8E8;
+    }
+
+    .fiber-target {
+      text-align: center;
+      font-size: 11px;
+      color: #666;
+      padding: 14px 20px;
+      background: linear-gradient(135deg, #E8F5E9 0%, #C8E6C9 100%);
+      border-radius: 10px;
+    }
+
+    .fiber-target strong {
+      color: #2E7D32;
+    }
+
+    @media (max-width: 700px) {
+      .sides-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    @media (max-width: 500px) {
+      .sides-grid {
+        grid-template-columns: 1fr;
+      }
     }
 
     /* Shopping List Styles */
@@ -734,9 +774,6 @@
       .rules-grid {
         grid-template-columns: 1fr 1fr;
       }
-      .timing-key {
-        grid-template-columns: 1fr;
-      }
       .shopping-grid {
         grid-template-columns: 1fr 1fr;
       }
@@ -762,7 +799,7 @@
 
   <header>
     <h1>HIGH-PROTEIN, LOW-AGE MEAL REFERENCE</h1>
-    <p class="subtitle">Moist-Heat Cooking for Lifters | Rosacea-Friendly | Digestion-Aware</p>
+    <p class="subtitle">Moist-Heat Cooking for Lifters | Rosacea-Friendly | High Fiber</p>
   </header>
 
   <!-- Week Planner -->
@@ -821,14 +858,6 @@
 
     <div class="timing-key">
       <div class="timing-item">
-        <span class="mini-badge badge-same-day">Same-day &#10003;</span>
-        <span>Low residue — safe for same-day</span>
-      </div>
-      <div class="timing-item">
-        <span class="mini-badge badge-day-before">Day-before &#9733;</span>
-        <span>Higher fiber — eat 24+ hrs ahead</span>
-      </div>
-      <div class="timing-item">
         <span class="mini-badge ip-badge" style="background:#E8F5E9;">IP friendly</span>
         <span>Works in Instant Pot</span>
       </div>
@@ -836,6 +865,73 @@
 
     <div class="nut-butter-row">
       <strong>Nut Butter Swaps:</strong> Tahini &bull; Almond butter &bull; Sunflower seed butter &bull; Powdered PB
+    </div>
+  </section>
+
+  <!-- Fiber Sides Section -->
+  <section class="fiber-sides">
+    <h2>Fiber Boost Sides</h2>
+    <p class="fiber-intro">Add these to any meal to hit 50-60g+ fiber daily. Mix and match freely.</p>
+
+    <div class="sides-grid">
+      <div class="side-card">
+        <div class="side-header">
+          <h4>Raw Veggie Plate</h4>
+          <span class="side-fiber">+8-12g fiber</span>
+        </div>
+        <ul>
+          <li><strong>Carrots</strong> — 8 oz raw sticks (6g)</li>
+          <li><strong>Beets</strong> — 4 oz grated/sliced (2g)</li>
+          <li><strong>Bell peppers</strong> — 1 medium sliced (2g)</li>
+          <li><strong>Cucumber</strong> — ½ medium (1g)</li>
+        </ul>
+        <p class="side-note">Prep Sunday, store in water. Lasts 5 days.</p>
+      </div>
+
+      <div class="side-card">
+        <div class="side-header">
+          <h4>Berry Bowl</h4>
+          <span class="side-fiber">+8-12g fiber</span>
+        </div>
+        <ul>
+          <li><strong>Strawberries</strong> — 12 oz frozen (6g)</li>
+          <li><strong>Blueberries</strong> — 6 oz (3g)</li>
+          <li><strong>Raspberries</strong> — 4 oz (4g)</li>
+        </ul>
+        <p class="side-note">Frozen works great. Thaw 10 min or eat frozen.</p>
+      </div>
+
+      <div class="side-card">
+        <div class="side-header">
+          <h4>Power Nut Mix</h4>
+          <span class="side-fiber">+5-7g fiber</span>
+        </div>
+        <ul>
+          <li><strong>Walnuts</strong> — 1 oz / 28g (2g + omega-3)</li>
+          <li><strong>Almonds</strong> — 1 oz / 28g (3.5g)</li>
+          <li><strong>Brazil nuts</strong> — 3-4 nuts (1g + selenium)</li>
+        </ul>
+        <p class="side-note">~200 kcal, 6g protein. Daily limit: 2 oz total.</p>
+      </div>
+
+      <div class="side-card">
+        <div class="side-header">
+          <h4>Greens Side</h4>
+          <span class="side-fiber">+4-8g fiber</span>
+        </div>
+        <ul>
+          <li><strong>Collard greens</strong> — 6 oz steamed (5g)</li>
+          <li><strong>Spinach</strong> — 3 cups raw (2g)</li>
+          <li><strong>Mushrooms</strong> — 8 oz raw/sautéed (3g)</li>
+        </ul>
+        <p class="side-note">Steam collards 3-4 min. Don't overcook.</p>
+      </div>
+    </div>
+
+    <div class="fiber-target">
+      <strong>Daily Target:</strong> 50-60g fiber minimum &bull;
+      <strong>Mike Lustgarten:</strong> 100g+ daily from massive raw veggie volume &bull;
+      <strong>Strategy:</strong> 3 meals × 15g + 2 sides × 8g = 61g
     </div>
   </section>
 
@@ -861,8 +957,8 @@
         id: 1,
         name: "Poached Eggs & Cottage Cheese Bowl",
         protein: "~30g",
+        fiber: "~1g",
         method: "Poach",
-        timing: "same-day",
         ip: false,
         ingredients: [
           { name: "Eggs", amount: "3 large", category: "proteins" },
@@ -883,8 +979,8 @@
         id: 2,
         name: "Steamed Salmon (or Sardines) & Smashed Potatoes",
         protein: "~40g",
+        fiber: "~3g",
         method: "Steam",
-        timing: "same-day",
         ip: true,
         ingredients: [
           { name: "Salmon fillet or canned sardines", amount: "6 oz / 2 tins", category: "proteins" },
@@ -906,8 +1002,8 @@
         id: 3,
         name: "Poached Chicken Breast & Rice",
         protein: "~45g",
+        fiber: "~1g",
         method: "Poach",
-        timing: "same-day",
         ip: true,
         ingredients: [
           { name: "Chicken breast", amount: "8 oz", category: "proteins" },
@@ -930,8 +1026,8 @@
         id: 4,
         name: "Greek Yogurt Power Bowl",
         protein: "~45-50g",
+        fiber: "~5g",
         method: "No-cook",
-        timing: "same-day",
         ip: false,
         ingredients: [
           { name: "Greek yogurt", amount: "1 cup", category: "dairy" },
@@ -953,8 +1049,8 @@
         id: 5,
         name: "Steamed Cod with Soft Polenta",
         protein: "~35g",
+        fiber: "~2g",
         method: "Steam",
-        timing: "same-day",
         ip: "partial",
         ingredients: [
           { name: "Cod fillet", amount: "6 oz", category: "proteins" },
@@ -977,8 +1073,8 @@
         id: 6,
         name: "Sous Vide Chicken Thighs & Rice",
         protein: "~40g",
+        fiber: "~1g",
         method: "Sous vide",
-        timing: "same-day",
         ip: false,
         ingredients: [
           { name: "Chicken thighs (boneless)", amount: "8 oz", category: "proteins" },
@@ -1000,8 +1096,8 @@
         id: 7,
         name: "Sardine & Lentil Bowl",
         protein: "~35g",
+        fiber: "~8g",
         method: "Simmer",
-        timing: "day-before",
         ip: true,
         ingredients: [
           { name: "Green or brown lentils", amount: "½ cup dry", category: "legumes" },
@@ -1023,8 +1119,8 @@
         id: 8,
         name: "Slow Cooker White Bean & Chicken Stew",
         protein: "~45g",
+        fiber: "~16g",
         method: "Slow cook",
-        timing: "day-before",
         ip: true,
         ingredients: [
           { name: "Chicken thighs (bone-in)", amount: "1 lb", category: "proteins" },
@@ -1048,8 +1144,8 @@
         id: 9,
         name: "Pressure Cooker Black Bean Soup + Egg",
         protein: "~28g",
+        fiber: "~15g",
         method: "Pressure cook",
-        timing: "day-before",
         ip: true,
         ingredients: [
           { name: "Dried black beans", amount: "1 cup", category: "legumes" },
@@ -1072,8 +1168,8 @@
         id: 10,
         name: "Chickpea & Tuna Salad",
         protein: "~38g",
+        fiber: "~12g",
         method: "No-cook",
-        timing: "day-before",
         ip: false,
         ingredients: [
           { name: "Canned tuna (water)", amount: "2 cans (5 oz ea)", category: "proteins" },
@@ -1096,8 +1192,8 @@
         id: 11,
         name: "Overnight Protein Oats (Breakfast)",
         protein: "~40-50g",
+        fiber: "~10g",
         method: "No-cook",
-        timing: "day-before",
         ip: false,
         ingredients: [
           { name: "Rolled oats (GF)", amount: "½ cup", category: "carbs" },
@@ -1121,8 +1217,8 @@
         id: 12,
         name: "Red Lentil & Spinach Daal",
         protein: "~35-40g",
+        fiber: "~16g",
         method: "Simmer",
-        timing: "day-before",
         ip: true,
         ingredients: [
           { name: "Red lentils", amount: "1 cup dry", category: "legumes" },
@@ -1149,8 +1245,8 @@
         id: 13,
         name: "Lean Beef Stew (Instant Pot)",
         protein: "~45-55g",
+        fiber: "~6g",
         method: "Pressure cook",
-        timing: "same-day",
         ip: true,
         ingredients: [
           { name: "Lean beef stew meat", amount: "8 oz", category: "proteins" },
@@ -1176,8 +1272,8 @@
         id: 14,
         name: "Greek Lemon Chicken + Rice + Zucchini",
         protein: "~45-55g",
+        fiber: "~3g",
         method: "Braise (covered)",
-        timing: "same-day",
         ip: true,
         ingredients: [
           { name: "Chicken thighs or breast", amount: "8 oz", category: "proteins" },
@@ -1202,8 +1298,8 @@
         id: 15,
         name: "Turkey Meatballs + Tomato + White Beans",
         protein: "~45-55g",
+        fiber: "~15g",
         method: "Simmer (no browning)",
-        timing: "day-before",
         ip: true,
         ingredients: [
           { name: "Ground turkey or chicken", amount: "8 oz", category: "proteins" },
@@ -1229,8 +1325,8 @@
         id: 16,
         name: "Steamed Egg Bites (Breakfast)",
         protein: "~30-35g",
+        fiber: "~0g",
         method: "Steam",
-        timing: "same-day",
         ip: true,
         ingredients: [
           { name: "Eggs", amount: "4 large", category: "proteins" },
@@ -1251,8 +1347,8 @@
         id: 17,
         name: "Cottage Cheese Scramble (Breakfast)",
         protein: "~35-40g",
+        fiber: "~5g",
         method: "Low-heat scramble",
-        timing: "same-day",
         ip: false,
         ingredients: [
           { name: "Eggs", amount: "3 large", category: "proteins" },
@@ -1269,6 +1365,58 @@
         ],
         tip: "Low & slow: Keep heat on low-medium the entire time. No brown bits = minimal AGEs. Cottage cheese adds creaminess + protein.",
         tipType: "normal"
+      },
+      {
+        id: 18,
+        name: "Sardine & Raw Veggie Power Bowl (Lustgarten-style)",
+        protein: "~30g",
+        fiber: "~18g",
+        method: "No-cook",
+        ip: false,
+        ingredients: [
+          { name: "Canned sardines (olive oil)", amount: "1 tin (3.75 oz)", category: "proteins" },
+          { name: "Carrots, raw", amount: "8 oz (~2 large)", category: "produce" },
+          { name: "Beets, raw", amount: "4 oz (1 small)", category: "produce" },
+          { name: "Bell pepper, red", amount: "1 medium", category: "produce" },
+          { name: "Walnuts", amount: "1 oz (¼ cup)", category: "nuts" },
+          { name: "Collard greens or spinach", amount: "2 cups raw", category: "produce" },
+          { name: "Olive oil", amount: "1 tbsp", category: "pantry" },
+          { name: "Lemon", amount: "2 tbsp juice", category: "produce" },
+        ],
+        instructions: [
+          "Peel and grate or thinly slice raw beets. Slice carrots into sticks or coins. Slice bell pepper.",
+          "Arrange collard greens or spinach as a base in a large bowl.",
+          "Top with raw veggies, sardines (drained or with oil), and walnuts.",
+          "Drizzle with olive oil and lemon juice. Season with salt and pepper. Eat immediately."
+        ],
+        tip: "Mike Lustgarten eats ~100g fiber daily from massive raw veggie volume. This bowl packs 18g — have 2-3 daily to approach his levels.",
+        tipType: "normal"
+      },
+      {
+        id: 19,
+        name: "Mushroom & Greens Sardine Plate (Lustgarten-style)",
+        protein: "~28g",
+        fiber: "~14g",
+        method: "Light sauté",
+        ip: false,
+        ingredients: [
+          { name: "Canned sardines (olive oil)", amount: "1 tin (3.75 oz)", category: "proteins" },
+          { name: "Mushrooms, raw or lightly cooked", amount: "300g (~10 oz)", category: "produce" },
+          { name: "Collard greens", amount: "6 oz", category: "produce" },
+          { name: "Tomatoes, fresh", amount: "1 cup diced", category: "produce" },
+          { name: "Almonds", amount: "20g", category: "nuts" },
+          { name: "Garlic", amount: "2 cloves", category: "produce" },
+          { name: "Olive oil", amount: "1 tbsp", category: "pantry" },
+          { name: "Fresh parsley", amount: "¼ cup", category: "herbs" },
+        ],
+        instructions: [
+          "Lightly sauté mushrooms and garlic in olive oil over medium heat. Don't brown — just soften (3-4 min).",
+          "Steam or wilt collard greens briefly (2-3 min) until bright green but still has texture.",
+          "Arrange greens on plate, top with mushrooms, fresh tomatoes, and sardines.",
+          "Scatter almonds and parsley on top. Drizzle with olive oil from the sardine tin."
+        ],
+        tip: "Mike eats 600g raw mushrooms some days. This is a more moderate approach — scale up mushrooms for more fiber.",
+        tipType: "normal"
       }
     ];
 
@@ -1284,15 +1432,12 @@
     function renderMeals() {
       const grid = document.getElementById('meals-grid');
       grid.innerHTML = meals.map(meal => `
-        <div class="meal-card ${meal.timing === 'day-before' ? 'day-before' : ''} ${selectedMeals.includes(meal.id) ? 'selected' : ''}" data-id="${meal.id}">
+        <div class="meal-card ${selectedMeals.includes(meal.id) ? 'selected' : ''}" data-id="${meal.id}" onclick="toggleRecipe(${meal.id})">
           <div class="meal-header">
-            <button class="close-btn" onclick="event.stopPropagation(); closeRecipe(${meal.id});">&times;</button>
-            <span class="badge badge-${meal.timing === 'day-before' ? 'day-before' : 'same-day'}">
-              ${meal.timing === 'day-before' ? 'Day-before ★' : 'Same-day ✓'}
-            </span>
             <h3>${meal.id}. ${meal.name}</h3>
             <div class="meal-summary">
               <span><span class="label">Protein:</span> ${meal.protein}</span>
+              <span><span class="label">Fiber:</span> ${meal.fiber}</span>
               <span><span class="label">Method:</span> ${meal.method}</span>
               ${meal.ip ? `<span class="ip-badge">IP ${meal.ip === 'partial' ? 'partial' : 'friendly'}</span>` : ''}
             </div>
@@ -1300,7 +1445,6 @@
               <button class="btn-add-week" onclick="event.stopPropagation(); toggleMealSelection(${meal.id});">
                 ${selectedMeals.includes(meal.id) ? '✓ In Plan' : '+ Add to Week'}
               </button>
-              <button class="btn-view-recipe" onclick="event.stopPropagation(); toggleRecipe(${meal.id});">View Recipe</button>
             </div>
           </div>
           <div class="meal-details">
@@ -1341,6 +1485,10 @@
         const match = m.protein.match(/(\d+)/);
         return sum + (match ? parseInt(match[1]) : 0);
       }, 0);
+      const totalFiber = selected.reduce((sum, m) => {
+        const match = m.fiber.match(/(\d+)/);
+        return sum + (match ? parseInt(match[1]) : 0);
+      }, 0);
 
       container.innerHTML = `
         <div class="week-planner-meals">
@@ -1352,8 +1500,9 @@
           `).join('')}
         </div>
         <div class="week-stats">
-          <span><strong>${selected.length}</strong> meals selected</span>
-          <span>~<strong>${totalProtein}g</strong> total protein</span>
+          <span><strong>${selected.length}</strong> meals</span>
+          <span>~<strong>${totalProtein}g</strong> protein</span>
+          <span>~<strong>${totalFiber}g</strong> fiber</span>
           <button class="clear-week" onclick="clearWeek()">Clear All</button>
         </div>
       `;
@@ -1401,6 +1550,7 @@
         carbs: { name: 'Carbs & Starches', items: [] },
         legumes: { name: 'Legumes & Beans', items: [] },
         produce: { name: 'Produce', items: [] },
+        nuts: { name: 'Nuts & Seeds', items: [] },
         herbs: { name: 'Herbs & Spices', items: [] },
         pantry: { name: 'Pantry Staples', items: [] },
         nutbutters: { name: 'Nut Butters', items: [] }
@@ -1499,10 +1649,6 @@
       }
     }
 
-    function closeRecipe(id) {
-      const card = document.querySelector(`.meal-card[data-id="${id}"]`);
-      card.classList.remove('expanded');
-    }
 
     function toggleShopping() {
       const content = document.getElementById('shopping-content');
