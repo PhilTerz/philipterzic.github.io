@@ -1,0 +1,1535 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="Meal Plan">
+  <meta name="theme-color" content="#F9F7F4">
+  <title>High-Protein, Low-AGE Meal Reference</title>
+  <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🥗</text></svg>">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      background: #F9F7F4;
+      color: #2D2D2D;
+      padding: 32px;
+      max-width: 900px;
+      margin: 0 auto;
+      line-height: 1.5;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 24px;
+      padding-bottom: 24px;
+      border-bottom: 2px solid #E0E0E0;
+    }
+
+    h1 {
+      font-size: 28px;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+      margin-bottom: 8px;
+      color: #1a1a1a;
+    }
+
+    .subtitle {
+      font-size: 14px;
+      color: #666;
+      font-style: italic;
+    }
+
+    /* Week Planner */
+    .week-planner {
+      background: linear-gradient(135deg, #4DA6A6 0%, #3D8B8B 100%);
+      border-radius: 12px;
+      padding: 20px 24px;
+      margin-bottom: 24px;
+      color: white;
+    }
+
+    .week-planner h2 {
+      font-size: 14px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .week-planner-empty {
+      font-size: 13px;
+      opacity: 0.8;
+    }
+
+    .week-planner-meals {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .week-meal-chip {
+      background: rgba(255,255,255,0.2);
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .week-meal-chip .remove-meal {
+      background: rgba(255,255,255,0.3);
+      border: none;
+      color: white;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      cursor: pointer;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .week-meal-chip .remove-meal:hover {
+      background: rgba(255,255,255,0.5);
+    }
+
+    .week-stats {
+      margin-top: 12px;
+      padding-top: 12px;
+      border-top: 1px solid rgba(255,255,255,0.2);
+      font-size: 12px;
+      display: flex;
+      gap: 20px;
+    }
+
+    .clear-week {
+      background: rgba(255,255,255,0.2);
+      border: none;
+      color: white;
+      padding: 6px 14px;
+      border-radius: 6px;
+      font-size: 11px;
+      cursor: pointer;
+      margin-left: auto;
+    }
+
+    .clear-week:hover {
+      background: rgba(255,255,255,0.3);
+    }
+
+    .meals-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+
+    .meal-card {
+      background: white;
+      border: 2px solid #E0E0E0;
+      border-radius: 12px;
+      overflow: hidden;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      position: relative;
+    }
+
+    .meal-card:hover {
+      border-color: #ccc;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      transform: translateY(-2px);
+    }
+
+    .meal-card.selected {
+      border-color: #4DA6A6;
+      box-shadow: 0 0 0 3px rgba(77, 166, 166, 0.2);
+    }
+
+    .meal-card.selected::before {
+      content: "✓";
+      position: absolute;
+      top: 8px;
+      left: 8px;
+      background: #4DA6A6;
+      color: white;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      font-weight: bold;
+      z-index: 10;
+    }
+
+    .meal-card.expanded {
+      grid-column: span 2;
+      cursor: default;
+      transform: none;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+    }
+
+    .meal-card.expanded:hover {
+      transform: none;
+    }
+
+    .meal-header {
+      padding: 16px 18px;
+      position: relative;
+    }
+
+    .meal-card h3 {
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 8px;
+      padding-right: 90px;
+      padding-left: 0;
+      line-height: 1.3;
+    }
+
+    .meal-card.selected h3 {
+      padding-left: 24px;
+    }
+
+    .badge {
+      position: absolute;
+      top: 14px;
+      right: 14px;
+      font-size: 9px;
+      font-weight: 700;
+      text-transform: uppercase;
+      padding: 5px 10px;
+      border-radius: 12px;
+      letter-spacing: 0.3px;
+    }
+
+    .badge-same-day {
+      background: #4DA6A6;
+      color: white;
+    }
+
+    .badge-day-before {
+      background: #D4A857;
+      color: #1a1a1a;
+    }
+
+    .meal-summary {
+      font-size: 12px;
+      color: #666;
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .meal-summary span {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .meal-summary .label {
+      color: #999;
+    }
+
+    .ip-badge {
+      background: #E8F5E9;
+      color: #2E7D32;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-size: 10px;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .ip-badge::before {
+      content: "⬡";
+      font-size: 8px;
+    }
+
+    .meal-actions {
+      display: flex;
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .btn-add-week {
+      background: #4DA6A6;
+      color: white;
+      border: none;
+      padding: 6px 12px;
+      border-radius: 6px;
+      font-size: 11px;
+      cursor: pointer;
+      font-weight: 600;
+    }
+
+    .btn-add-week:hover {
+      background: #3D9696;
+    }
+
+    .meal-card.selected .btn-add-week {
+      background: #E8F5F5;
+      color: #4DA6A6;
+    }
+
+    .btn-view-recipe {
+      background: #f0f0f0;
+      color: #666;
+      border: none;
+      padding: 6px 12px;
+      border-radius: 6px;
+      font-size: 11px;
+      cursor: pointer;
+    }
+
+    .btn-view-recipe:hover {
+      background: #e0e0e0;
+    }
+
+    .meal-details {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.4s ease;
+      background: linear-gradient(to bottom, #FAFAFA, #F5F5F5);
+      border-top: 1px solid transparent;
+    }
+
+    .meal-card.expanded .meal-details {
+      max-height: 700px;
+      border-top-color: #E8E8E8;
+    }
+
+    .meal-details-inner {
+      padding: 24px;
+      display: grid;
+      grid-template-columns: 1fr 1.5fr;
+      gap: 28px;
+    }
+
+    .ingredients h4,
+    .instructions h4 {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: #4DA6A6;
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .ingredients h4::before,
+    .instructions h4::before {
+      content: "";
+      display: block;
+      width: 3px;
+      height: 14px;
+      background: #4DA6A6;
+      border-radius: 2px;
+    }
+
+    .day-before .ingredients h4::before,
+    .day-before .instructions h4::before {
+      background: #D4A857;
+    }
+
+    .day-before .ingredients h4,
+    .day-before .instructions h4 {
+      color: #C4983F;
+    }
+
+    .ingredients ul {
+      list-style: none;
+      font-size: 13px;
+    }
+
+    .ingredients li {
+      padding: 8px 0;
+      border-bottom: 1px solid #EEEEEE;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .ingredients li:last-child {
+      border-bottom: none;
+    }
+
+    .ingredients .amount {
+      color: #888;
+      font-size: 12px;
+      background: #f0f0f0;
+      padding: 2px 8px;
+      border-radius: 4px;
+    }
+
+    .instructions ol {
+      list-style: none;
+      font-size: 13px;
+      counter-reset: steps;
+    }
+
+    .instructions li {
+      padding: 10px 0 10px 36px;
+      position: relative;
+      border-bottom: 1px solid #EEEEEE;
+    }
+
+    .instructions li:last-child {
+      border-bottom: none;
+    }
+
+    .instructions li::before {
+      counter-increment: steps;
+      content: counter(steps);
+      position: absolute;
+      left: 0;
+      top: 10px;
+      width: 24px;
+      height: 24px;
+      background: #4DA6A6;
+      color: white;
+      border-radius: 50%;
+      font-size: 12px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .meal-card.day-before .instructions li::before {
+      background: #D4A857;
+    }
+
+    .close-btn {
+      position: absolute;
+      top: 14px;
+      right: 90px;
+      background: #f0f0f0;
+      border: none;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      cursor: pointer;
+      font-size: 18px;
+      color: #666;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+    }
+
+    .close-btn:hover {
+      background: #e0e0e0;
+      color: #333;
+    }
+
+    .meal-card.expanded .close-btn {
+      display: flex;
+    }
+
+    .tip {
+      margin-top: 16px;
+      padding: 12px 16px;
+      background: linear-gradient(135deg, #FFF9E6 0%, #FFF5D6 100%);
+      border-radius: 8px;
+      font-size: 12px;
+      color: #8B7355;
+      grid-column: span 2;
+      border-left: 3px solid #D4A857;
+    }
+
+    .tip strong {
+      color: #6B5A42;
+    }
+
+    .ip-tip {
+      background: linear-gradient(135deg, #E8F5E9 0%, #C8E6C9 100%);
+      border-left-color: #4CAF50;
+      color: #2E7D32;
+    }
+
+    .ip-tip strong {
+      color: #1B5E20;
+    }
+
+    /* Fast Rules */
+    .fast-rules {
+      background: white;
+      border: 1px solid #E0E0E0;
+      border-radius: 12px;
+      padding: 24px;
+    }
+
+    .fast-rules h2 {
+      font-size: 14px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 20px;
+      color: #1a1a1a;
+      text-align: center;
+    }
+
+    .rules-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+
+    .rule-box {
+      background: #F9F7F4;
+      border-radius: 10px;
+      padding: 14px;
+    }
+
+    .rule-box h4 {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: #4DA6A6;
+      margin-bottom: 10px;
+    }
+
+    .rule-box ul {
+      list-style: none;
+      font-size: 11px;
+      color: #555;
+    }
+
+    .rule-box li {
+      margin-bottom: 5px;
+      padding-left: 10px;
+      position: relative;
+    }
+
+    .rule-box li::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 6px;
+      width: 4px;
+      height: 4px;
+      background: #ccc;
+      border-radius: 50%;
+    }
+
+    .timing-key {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 12px;
+      background: linear-gradient(135deg, #f5f5f5 0%, #ececec 100%);
+      border-radius: 10px;
+      padding: 14px 20px;
+      margin-bottom: 16px;
+    }
+
+    .timing-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 11px;
+    }
+
+    .timing-item .mini-badge {
+      font-size: 8px;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 10px;
+      white-space: nowrap;
+    }
+
+    .nut-butter-row {
+      text-align: center;
+      font-size: 11px;
+      color: #777;
+      padding-top: 12px;
+      border-top: 1px solid #E8E8E8;
+    }
+
+    .nut-butter-row strong {
+      color: #555;
+    }
+
+    /* Shopping List Styles */
+    .shopping-list {
+      background: white;
+      border: 1px solid #E0E0E0;
+      border-radius: 12px;
+      margin-top: 24px;
+      overflow: hidden;
+    }
+
+    .shopping-header {
+      padding: 18px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: pointer;
+      background: linear-gradient(135deg, #f8f8f8 0%, #f0f0f0 100%);
+      transition: background 0.2s;
+    }
+
+    .shopping-header:hover {
+      background: linear-gradient(135deg, #f0f0f0 0%, #e8e8e8 100%);
+    }
+
+    .shopping-header h2 {
+      font-size: 14px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #1a1a1a;
+      margin: 0;
+    }
+
+    .shopping-toggle {
+      font-size: 12px;
+      color: #4DA6A6;
+      font-weight: 600;
+    }
+
+    .shopping-content {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.4s ease, padding 0.3s ease;
+      padding: 0 24px;
+    }
+
+    .shopping-content.expanded {
+      max-height: 3000px;
+      padding: 24px;
+      padding-top: 0;
+    }
+
+    .shopping-empty {
+      padding: 40px 20px;
+      text-align: center;
+      color: #999;
+      font-size: 14px;
+    }
+
+    .shopping-empty-icon {
+      font-size: 48px;
+      margin-bottom: 12px;
+      opacity: 0.5;
+    }
+
+    .shopping-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+      padding-top: 20px;
+      border-top: 1px solid #E8E8E8;
+    }
+
+    .shopping-category {
+      break-inside: avoid;
+    }
+
+    .shopping-category h4 {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: #4DA6A6;
+      margin-bottom: 12px;
+      padding-bottom: 8px;
+      border-bottom: 2px solid #E8F5F5;
+    }
+
+    .shopping-category ul {
+      list-style: none;
+      font-size: 12px;
+    }
+
+    .shopping-category li {
+      margin-bottom: 8px;
+      padding: 4px 0;
+    }
+
+    .shopping-category label {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      cursor: pointer;
+      transition: opacity 0.2s;
+    }
+
+    .shopping-category input[type="checkbox"] {
+      width: 16px;
+      height: 16px;
+      accent-color: #4DA6A6;
+      cursor: pointer;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .shopping-category label.checked {
+      text-decoration: line-through;
+      opacity: 0.5;
+    }
+
+    .ingredient-amount {
+      color: #4DA6A6;
+      font-weight: 600;
+    }
+
+    .ingredient-meals {
+      display: block;
+      font-size: 10px;
+      color: #999;
+      margin-top: 2px;
+    }
+
+    .shopping-note {
+      margin-top: 20px;
+      padding: 12px 16px;
+      background: #F9F7F4;
+      border-radius: 8px;
+      font-size: 12px;
+      color: #666;
+    }
+
+    .shopping-note strong {
+      color: #4DA6A6;
+    }
+
+    @media (max-width: 700px) {
+      body {
+        padding: 16px;
+      }
+      .meals-grid {
+        grid-template-columns: 1fr;
+      }
+      .meal-card.expanded {
+        grid-column: span 1;
+      }
+      .meal-details-inner {
+        grid-template-columns: 1fr;
+        gap: 20px;
+      }
+      .tip {
+        grid-column: span 1;
+      }
+      .rules-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+      .timing-key {
+        grid-template-columns: 1fr;
+      }
+      .shopping-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    @media (max-width: 500px) {
+      .shopping-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media print {
+      .meal-card {
+        break-inside: avoid;
+      }
+      .week-planner, .meal-actions {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>HIGH-PROTEIN, LOW-AGE MEAL REFERENCE</h1>
+    <p class="subtitle">Moist-Heat Cooking for Lifters | Rosacea-Friendly | Digestion-Aware</p>
+  </header>
+
+  <!-- Week Planner -->
+  <section class="week-planner">
+    <h2>This Week's Meals</h2>
+    <div id="week-meals">
+      <p class="week-planner-empty">Click "Add to Week" on meals below to build your plan</p>
+    </div>
+  </section>
+
+  <section class="meals-grid" id="meals-grid">
+    <!-- Meals will be rendered by JavaScript -->
+  </section>
+
+  <section class="fast-rules">
+    <h2>Fast Rules</h2>
+
+    <div class="rules-grid">
+      <div class="rule-box">
+        <h4>Low-AGE Cooking</h4>
+        <ul>
+          <li>Steam, poach, simmer, slow cook, pressure cook, sous vide</li>
+          <li>Avoid browning, grilling, searing, frying</li>
+          <li>Lower temp = fewer AGEs</li>
+        </ul>
+      </div>
+
+      <div class="rule-box">
+        <h4>Rosacea Notes</h4>
+        <ul>
+          <li>No spicy ingredients</li>
+          <li>Let meals cool 5-10 min</li>
+          <li>Mild herbs: dill, parsley, basil, thyme</li>
+        </ul>
+      </div>
+
+      <div class="rule-box">
+        <h4>Protein Boosters</h4>
+        <ul>
+          <li>Greek yogurt (20g/cup)</li>
+          <li>Cottage cheese (14g/&frac12;c)</li>
+          <li>Whey isolate (25g/scoop)</li>
+          <li>Canned fish</li>
+        </ul>
+      </div>
+
+      <div class="rule-box">
+        <h4>Gluten Note</h4>
+        <ul>
+          <li>Default: rice, potatoes, polenta</li>
+          <li>Bread/pasta optional</li>
+          <li>GF oats work too</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="timing-key">
+      <div class="timing-item">
+        <span class="mini-badge badge-same-day">Same-day &#10003;</span>
+        <span>Low residue — safe for same-day</span>
+      </div>
+      <div class="timing-item">
+        <span class="mini-badge badge-day-before">Day-before &#9733;</span>
+        <span>Higher fiber — eat 24+ hrs ahead</span>
+      </div>
+      <div class="timing-item">
+        <span class="mini-badge ip-badge" style="background:#E8F5E9;">IP friendly</span>
+        <span>Works in Instant Pot</span>
+      </div>
+    </div>
+
+    <div class="nut-butter-row">
+      <strong>Nut Butter Swaps:</strong> Tahini &bull; Almond butter &bull; Sunflower seed butter &bull; Powdered PB
+    </div>
+  </section>
+
+  <!-- Shopping List Section -->
+  <section class="shopping-list">
+    <div class="shopping-header" onclick="toggleShopping()">
+      <h2>Shopping List <span id="shopping-count"></span></h2>
+      <span class="shopping-toggle" id="shopping-toggle">&#9662; Expand</span>
+    </div>
+    <div class="shopping-content" id="shopping-content">
+      <div id="shopping-list-content">
+        <!-- Generated by JavaScript -->
+      </div>
+    </div>
+  </section>
+
+  <script>
+    // ============================================
+    // MEAL DATA
+    // ============================================
+    const meals = [
+      {
+        id: 1,
+        name: "Poached Eggs & Cottage Cheese Bowl",
+        protein: "~30g",
+        method: "Poach",
+        timing: "same-day",
+        ip: false,
+        ingredients: [
+          { name: "Eggs", amount: "3 large", category: "proteins" },
+          { name: "Cottage cheese", amount: "½ cup", category: "dairy" },
+          { name: "White rice", amount: "1 cup cooked", category: "carbs" },
+          { name: "Olive oil", amount: "1 tbsp", category: "pantry" },
+        ],
+        instructions: [
+          "Bring a pot of water to a gentle simmer (small bubbles, not rolling boil). Add a splash of white vinegar.",
+          "Crack each egg into a small bowl, then gently slide into the water. Poach for 3 minutes for runny yolks.",
+          "Remove eggs with a slotted spoon and rest briefly on a paper towel.",
+          "Place warm rice in a bowl, top with cottage cheese and poached eggs. Drizzle with olive oil and season."
+        ],
+        tip: "Rosacea tip: Let the bowl rest 5 minutes before eating to avoid heat triggers.",
+        tipType: "normal"
+      },
+      {
+        id: 2,
+        name: "Steamed Salmon (or Sardines) & Smashed Potatoes",
+        protein: "~40g",
+        method: "Steam",
+        timing: "same-day",
+        ip: true,
+        ingredients: [
+          { name: "Salmon fillet or canned sardines", amount: "6 oz / 2 tins", category: "proteins" },
+          { name: "Baby potatoes", amount: "8 oz", category: "carbs" },
+          { name: "Butter", amount: "1 tbsp", category: "dairy" },
+          { name: "Fresh dill", amount: "1 tbsp", category: "herbs" },
+          { name: "Lemon", amount: "1 wedge", category: "produce" },
+        ],
+        instructions: [
+          "Boil or pressure-cook potatoes until fork-tender (IP: 8 min high pressure, quick release). Smash with butter and salt.",
+          "Salmon: Steam on rack over simmering water (or IP trivet) for 10-12 min until it flakes.",
+          "Sardines: Simply open cans and drain. No cooking needed — just warm slightly if desired.",
+          "Plate fish over smashed potatoes. Garnish with fresh dill and a squeeze of lemon."
+        ],
+        tip: "Instant Pot: Cook potatoes first (8 min), quick release, then steam salmon on trivet (4 min low pressure).",
+        tipType: "ip"
+      },
+      {
+        id: 3,
+        name: "Poached Chicken Breast & Rice",
+        protein: "~45g",
+        method: "Poach",
+        timing: "same-day",
+        ip: true,
+        ingredients: [
+          { name: "Chicken breast", amount: "8 oz", category: "proteins" },
+          { name: "Chicken broth (low sodium)", amount: "3 cups", category: "pantry" },
+          { name: "Garlic", amount: "2 cloves", category: "produce" },
+          { name: "Bay leaves", amount: "1", category: "herbs" },
+          { name: "White rice", amount: "1 cup cooked", category: "carbs" },
+          { name: "Fresh parsley", amount: "for garnish", category: "herbs" },
+        ],
+        instructions: [
+          "Stovetop: Bring broth to a gentle simmer with garlic and bay leaf. Add chicken, poach 15-18 min.",
+          "Instant Pot: Add broth, garlic, bay leaf, and chicken. Pressure cook 10 min, natural release 5 min.",
+          "Remove chicken and let rest 3 minutes. Slice against the grain.",
+          "Serve sliced chicken over rice. Spoon some poaching liquid on top and garnish with parsley."
+        ],
+        tip: "Instant Pot: Use pot-in-pot method — rice in a separate container on trivet — to cook chicken and rice together.",
+        tipType: "ip"
+      },
+      {
+        id: 4,
+        name: "Greek Yogurt Power Bowl",
+        protein: "~45-50g",
+        method: "No-cook",
+        timing: "same-day",
+        ip: false,
+        ingredients: [
+          { name: "Greek yogurt", amount: "1 cup", category: "dairy" },
+          { name: "Whey protein isolate", amount: "1 scoop", category: "dairy" },
+          { name: "Banana", amount: "1 medium", category: "produce" },
+          { name: "Almond or peanut butter", amount: "2 tbsp", category: "nutbutters" },
+          { name: "Honey", amount: "1 tsp", category: "pantry" },
+        ],
+        instructions: [
+          "Add Greek yogurt to a bowl. Stir in whey protein until smooth and well combined.",
+          "Slice banana and arrange on top.",
+          "Drizzle with nut butter and honey. Dust with cinnamon if desired.",
+          "Eat immediately or refrigerate up to 2 hours (texture changes after)."
+        ],
+        tip: "Swap ideas: Use powdered PB for fewer calories, or tahini for a nut-free option.",
+        tipType: "normal"
+      },
+      {
+        id: 5,
+        name: "Steamed Cod with Soft Polenta",
+        protein: "~35g",
+        method: "Steam",
+        timing: "same-day",
+        ip: "partial",
+        ingredients: [
+          { name: "Cod fillet", amount: "6 oz", category: "proteins" },
+          { name: "Instant polenta", amount: "½ cup dry", category: "carbs" },
+          { name: "Milk", amount: "1 cup", category: "dairy" },
+          { name: "Butter", amount: "1 tbsp", category: "dairy" },
+          { name: "Lemon", amount: "1 tsp zest", category: "produce" },
+          { name: "Fresh basil", amount: "for garnish", category: "herbs" },
+        ],
+        instructions: [
+          "Cook polenta on stovetop according to package, using milk for creaminess. Stir in butter.",
+          "Season cod fillet with salt. Steam over simmering water (or IP trivet) for 8-10 minutes.",
+          "Spoon soft polenta into a shallow bowl. Place steamed cod on top.",
+          "Finish with lemon zest and torn fresh basil leaves."
+        ],
+        tip: "Instant Pot: Steam cod on trivet (4 min low pressure). Polenta is better on stovetop for texture control.",
+        tipType: "ip"
+      },
+      {
+        id: 6,
+        name: "Sous Vide Chicken Thighs & Rice",
+        protein: "~40g",
+        method: "Sous vide",
+        timing: "same-day",
+        ip: false,
+        ingredients: [
+          { name: "Chicken thighs (boneless)", amount: "8 oz", category: "proteins" },
+          { name: "Garlic powder", amount: "½ tsp", category: "herbs" },
+          { name: "Dried thyme", amount: "½ tsp", category: "herbs" },
+          { name: "Olive oil", amount: "1 tbsp", category: "pantry" },
+          { name: "White rice", amount: "1 cup cooked", category: "carbs" },
+        ],
+        instructions: [
+          "Season thighs with salt, garlic powder, and thyme. Vacuum seal with olive oil.",
+          "Sous vide at 165°F (74°C) for 1.5-2 hours until perfectly tender.",
+          "Remove from bag and pat dry. Slice into strips.",
+          "Serve over jasmine rice. Drizzle with bag juices or extra olive oil."
+        ],
+        tip: "No sear needed: Skip the post-sear to keep AGEs low. The meat is still incredibly tender.",
+        tipType: "normal"
+      },
+      {
+        id: 7,
+        name: "Sardine & Lentil Bowl",
+        protein: "~35g",
+        method: "Simmer",
+        timing: "day-before",
+        ip: true,
+        ingredients: [
+          { name: "Green or brown lentils", amount: "½ cup dry", category: "legumes" },
+          { name: "Canned sardines (olive oil)", amount: "1 tin (3.75 oz)", category: "proteins" },
+          { name: "Olive oil", amount: "1 tbsp", category: "pantry" },
+          { name: "Lemon", amount: "1 tbsp juice", category: "produce" },
+          { name: "Fresh parsley", amount: "2 tbsp", category: "herbs" },
+        ],
+        instructions: [
+          "Stovetop: Rinse lentils. Simmer in salted water for 20-25 minutes until tender. Drain.",
+          "Instant Pot: Lentils + 1.5 cups water. High pressure 8-10 min, quick release. Drain excess.",
+          "Spread warm lentils in a shallow bowl. Top with sardines (break apart gently).",
+          "Drizzle with olive oil and lemon juice. Garnish with parsley."
+        ],
+        tip: "Instant Pot: Lentils are perfect for IP — 8 min vs 25 min stovetop. Green/brown hold shape best.",
+        tipType: "ip"
+      },
+      {
+        id: 8,
+        name: "Slow Cooker White Bean & Chicken Stew",
+        protein: "~45g",
+        method: "Slow cook",
+        timing: "day-before",
+        ip: true,
+        ingredients: [
+          { name: "Chicken thighs (bone-in)", amount: "1 lb", category: "proteins" },
+          { name: "Canned cannellini beans", amount: "1 can (15 oz)", category: "legumes" },
+          { name: "Carrots", amount: "2 medium", category: "produce" },
+          { name: "Celery", amount: "2 stalks", category: "produce" },
+          { name: "Chicken broth (low sodium)", amount: "2 cups", category: "pantry" },
+          { name: "Dried thyme", amount: "1 tsp", category: "herbs" },
+          { name: "Dried rosemary", amount: "1 tsp", category: "herbs" },
+        ],
+        instructions: [
+          "Place chicken thighs at the bottom of slow cooker (or IP).",
+          "Add beans, carrots, celery, herbs, and pour broth over everything.",
+          "Slow cooker: LOW 6-8 hrs or HIGH 3-4 hrs. IP: Pressure cook 15 min, natural release 10 min.",
+          "Remove bones, shred chicken, and stir back in. Season with salt and pepper."
+        ],
+        tip: "Instant Pot: Cuts cooking time from 6-8 hours to under 30 minutes. Same tender results.",
+        tipType: "ip"
+      },
+      {
+        id: 9,
+        name: "Pressure Cooker Black Bean Soup + Egg",
+        protein: "~28g",
+        method: "Pressure cook",
+        timing: "day-before",
+        ip: true,
+        ingredients: [
+          { name: "Dried black beans", amount: "1 cup", category: "legumes" },
+          { name: "Onion", amount: "1 medium", category: "produce" },
+          { name: "Garlic", amount: "3 cloves", category: "produce" },
+          { name: "Ground cumin", amount: "1 tsp", category: "herbs" },
+          { name: "Vegetable broth", amount: "4 cups", category: "pantry" },
+          { name: "Eggs", amount: "1-2", category: "proteins" },
+        ],
+        instructions: [
+          "Add rinsed beans, onion, garlic, cumin, and broth to Instant Pot. No soaking needed.",
+          "Pressure cook on HIGH for 25-30 minutes. Natural release 15 minutes.",
+          "Use an immersion blender to blend half the soup for creaminess. Season with salt.",
+          "Ladle into bowl and top with a soft poached egg."
+        ],
+        tip: "Instant Pot: No pre-soaking needed — dry beans go straight in. Game changer for meal prep.",
+        tipType: "ip"
+      },
+      {
+        id: 10,
+        name: "Chickpea & Tuna Salad",
+        protein: "~38g",
+        method: "No-cook",
+        timing: "day-before",
+        ip: false,
+        ingredients: [
+          { name: "Canned tuna (water)", amount: "2 cans (5 oz ea)", category: "proteins" },
+          { name: "Canned chickpeas", amount: "1 can (15 oz)", category: "legumes" },
+          { name: "Cucumber", amount: "½ medium", category: "produce" },
+          { name: "Olive oil", amount: "2 tbsp", category: "pantry" },
+          { name: "Lemon", amount: "2 tbsp juice", category: "produce" },
+          { name: "Fresh dill", amount: "2 tbsp", category: "herbs" },
+        ],
+        instructions: [
+          "Drain and rinse chickpeas. Drain tuna well.",
+          "Combine chickpeas, tuna, and diced cucumber in a large bowl.",
+          "Dress with olive oil and lemon juice. Season generously with salt and pepper.",
+          "Toss gently with fresh dill. Serve at room temperature or slightly chilled."
+        ],
+        tip: "Zero cooking: Perfect for hot days or when you want a fast, high-protein meal without turning on the stove.",
+        tipType: "normal"
+      },
+      {
+        id: 11,
+        name: "Overnight Protein Oats (Breakfast)",
+        protein: "~40-50g",
+        method: "No-cook",
+        timing: "day-before",
+        ip: false,
+        ingredients: [
+          { name: "Rolled oats (GF)", amount: "½ cup", category: "carbs" },
+          { name: "Milk", amount: "½ cup", category: "dairy" },
+          { name: "Greek yogurt", amount: "½ cup", category: "dairy" },
+          { name: "Whey protein isolate", amount: "1 scoop", category: "dairy" },
+          { name: "Almond or peanut butter", amount: "1 tbsp", category: "nutbutters" },
+          { name: "Chia seeds", amount: "1 tbsp", category: "pantry" },
+          { name: "Berries", amount: "for topping", category: "produce" },
+        ],
+        instructions: [
+          "Combine oats, milk, Greek yogurt, and whey protein in a jar or container. Stir well.",
+          "Add chia seeds if using for extra fiber and omega-3s.",
+          "Cover and refrigerate overnight (or at least 4 hours).",
+          "In the morning, stir in nut butter and top with fresh fruit. Eat cold or warm slightly."
+        ],
+        tip: "Breakfast ready: Prep 3-4 jars on Sunday for grab-and-go weekday breakfasts. Keeps 4 days refrigerated.",
+        tipType: "normal"
+      },
+      {
+        id: 12,
+        name: "Red Lentil & Spinach Daal",
+        protein: "~35-40g",
+        method: "Simmer",
+        timing: "day-before",
+        ip: true,
+        ingredients: [
+          { name: "Red lentils", amount: "1 cup dry", category: "legumes" },
+          { name: "Vegetable broth", amount: "3 cups", category: "pantry" },
+          { name: "Onion", amount: "1 medium", category: "produce" },
+          { name: "Garlic", amount: "3 cloves", category: "produce" },
+          { name: "Ground turmeric", amount: "1 tsp", category: "herbs" },
+          { name: "Ground cumin", amount: "1 tsp", category: "herbs" },
+          { name: "Fresh ginger", amount: "1 tsp grated", category: "produce" },
+          { name: "Baby spinach", amount: "2 cups", category: "produce" },
+          { name: "Coconut milk", amount: "¼ cup", category: "pantry" },
+          { name: "Lemon", amount: "1 tbsp juice", category: "produce" },
+        ],
+        instructions: [
+          "Rinse red lentils. In a pot or IP, sauté onion and garlic in a little oil until soft.",
+          "Add lentils, broth, turmeric, cumin, and ginger. Stir to combine.",
+          "Stovetop: Simmer 15-20 min until lentils break down. IP: Pressure cook 8 min, quick release.",
+          "Stir in spinach until wilted. Add coconut milk if using. Finish with lemon juice and salt."
+        ],
+        tip: "Rosacea-safe spices: Turmeric and cumin are mild and anti-inflammatory. No chili needed — the lemon brightens it up.",
+        tipType: "ip"
+      },
+      {
+        id: 13,
+        name: "Lean Beef Stew (Instant Pot)",
+        protein: "~45-55g",
+        method: "Pressure cook",
+        timing: "same-day",
+        ip: true,
+        ingredients: [
+          { name: "Lean beef stew meat", amount: "8 oz", category: "proteins" },
+          { name: "Baby potatoes", amount: "1 cup cubed", category: "carbs" },
+          { name: "Carrots", amount: "2 medium", category: "produce" },
+          { name: "Celery", amount: "2 stalks", category: "produce" },
+          { name: "Beef or vegetable broth", amount: "2 cups", category: "pantry" },
+          { name: "Tomato paste", amount: "1 tbsp", category: "pantry" },
+          { name: "Apple cider vinegar", amount: "1 tbsp", category: "pantry" },
+          { name: "Dried thyme", amount: "1 tsp", category: "herbs" },
+          { name: "Dried rosemary", amount: "1 tsp", category: "herbs" },
+        ],
+        instructions: [
+          "Add beef cubes to IP — do NOT brown/sear. Add broth, tomato paste, and vinegar.",
+          "Add potatoes, carrots, celery, and herbs on top.",
+          "Pressure cook on HIGH for 35 minutes. Natural release 10-15 minutes.",
+          "Season with salt and pepper. Let cool slightly before eating."
+        ],
+        tip: "Zero browning: Skip the sear step — just dump everything in. The vinegar helps tenderize and adds brightness without AGEs.",
+        tipType: "ip"
+      },
+      {
+        id: 14,
+        name: "Greek Lemon Chicken + Rice + Zucchini",
+        protein: "~45-55g",
+        method: "Braise (covered)",
+        timing: "same-day",
+        ip: true,
+        ingredients: [
+          { name: "Chicken thighs or breast", amount: "8 oz", category: "proteins" },
+          { name: "Chicken broth (low sodium)", amount: "1 cup", category: "pantry" },
+          { name: "Lemon", amount: "3 tbsp juice + 1 tsp zest", category: "produce" },
+          { name: "Garlic", amount: "3 cloves", category: "produce" },
+          { name: "Dried oregano", amount: "1 tsp", category: "herbs" },
+          { name: "Zucchini", amount: "1 medium", category: "produce" },
+          { name: "White rice", amount: "1 cup cooked", category: "carbs" },
+          { name: "Olive oil", amount: "1 tbsp", category: "pantry" },
+        ],
+        instructions: [
+          "Combine broth, lemon juice, zest, garlic, oregano, and olive oil in pot or IP.",
+          "Add chicken (no searing). Stovetop: Cover and simmer 20-25 min. IP: 10 min high pressure.",
+          "Add zucchini in the last 5-8 minutes (stovetop) or quick steam after release (IP).",
+          "Serve chicken and zucchini over rice, spoon lemony broth on top."
+        ],
+        tip: "Lemon inhibits AGEs: Acidic marinades and cooking liquids help reduce AGE formation. Plus it tastes bright and fresh.",
+        tipType: "normal"
+      },
+      {
+        id: 15,
+        name: "Turkey Meatballs + Tomato + White Beans",
+        protein: "~45-55g",
+        method: "Simmer (no browning)",
+        timing: "day-before",
+        ip: true,
+        ingredients: [
+          { name: "Ground turkey or chicken", amount: "8 oz", category: "proteins" },
+          { name: "Eggs", amount: "1", category: "proteins" },
+          { name: "GF breadcrumbs or oats", amount: "2 tbsp", category: "carbs" },
+          { name: "Crushed tomatoes (canned)", amount: "1 can (14 oz)", category: "pantry" },
+          { name: "Canned cannellini beans", amount: "1 can (15 oz)", category: "legumes" },
+          { name: "Garlic", amount: "2 cloves", category: "produce" },
+          { name: "Fresh basil", amount: "1 tsp", category: "herbs" },
+          { name: "Dried oregano", amount: "1 tsp", category: "herbs" },
+          { name: "Parmesan cheese", amount: "for topping", category: "dairy" },
+        ],
+        instructions: [
+          "Mix ground meat with egg, breadcrumbs, salt, and a pinch of herbs. Form into 8-10 meatballs.",
+          "In a pot or IP, combine crushed tomatoes, beans, garlic, and remaining herbs. Bring to simmer.",
+          "Drop raw meatballs directly into simmering sauce — do NOT brown first. Cover and simmer 20-25 min (or IP 8 min).",
+          "Serve in bowls, topped with parmesan if desired. Let cool slightly."
+        ],
+        tip: "No-brown meatballs: Dropping them raw into sauce keeps AGEs minimal. The beans add fiber, so plan for day-before.",
+        tipType: "ip"
+      },
+      {
+        id: 16,
+        name: "Steamed Egg Bites (Breakfast)",
+        protein: "~30-35g",
+        method: "Steam",
+        timing: "same-day",
+        ip: true,
+        ingredients: [
+          { name: "Eggs", amount: "4 large", category: "proteins" },
+          { name: "Cottage cheese", amount: "½ cup", category: "dairy" },
+          { name: "Shredded cheese (cheddar or gruyère)", amount: "¼ cup", category: "dairy" },
+          { name: "Fresh chives", amount: "1 tbsp", category: "herbs" },
+        ],
+        instructions: [
+          "Blend eggs, cottage cheese, shredded cheese, and salt until smooth.",
+          "Pour into silicone egg bite mold (or greased ramekins). Cover with foil.",
+          "Add 1 cup water to IP, place mold on trivet. Pressure cook 8 min, natural release 5 min.",
+          "Remove carefully, let cool 2-3 minutes. Pop out and top with chives."
+        ],
+        tip: "Meal prep win: Make 7 at once, refrigerate. Reheat in microwave 30 sec for instant breakfast all week.",
+        tipType: "ip"
+      },
+      {
+        id: 17,
+        name: "Cottage Cheese Scramble (Breakfast)",
+        protein: "~35-40g",
+        method: "Low-heat scramble",
+        timing: "same-day",
+        ip: false,
+        ingredients: [
+          { name: "Eggs", amount: "3 large", category: "proteins" },
+          { name: "Cottage cheese", amount: "½ cup", category: "dairy" },
+          { name: "Butter", amount: "1 tsp", category: "dairy" },
+          { name: "Fresh dill or chives", amount: "1 tbsp", category: "herbs" },
+          { name: "Avocado", amount: "½", category: "produce" },
+        ],
+        instructions: [
+          "Whisk eggs with a pinch of salt. Melt butter in a non-stick pan over LOW heat.",
+          "Add eggs and stir slowly with a spatula, creating soft curds. Keep heat low — no browning.",
+          "When eggs are 80% set, fold in cottage cheese. Remove from heat immediately.",
+          "The residual heat finishes cooking. Top with herbs, serve with avocado or fruit."
+        ],
+        tip: "Low & slow: Keep heat on low-medium the entire time. No brown bits = minimal AGEs. Cottage cheese adds creaminess + protein.",
+        tipType: "normal"
+      }
+    ];
+
+    // ============================================
+    // STATE
+    // ============================================
+    let selectedMeals = JSON.parse(localStorage.getItem('selectedMeals') || '[]');
+    let checkedItems = JSON.parse(localStorage.getItem('checkedItems') || '{}');
+
+    // ============================================
+    // RENDER FUNCTIONS
+    // ============================================
+    function renderMeals() {
+      const grid = document.getElementById('meals-grid');
+      grid.innerHTML = meals.map(meal => `
+        <div class="meal-card ${meal.timing === 'day-before' ? 'day-before' : ''} ${selectedMeals.includes(meal.id) ? 'selected' : ''}" data-id="${meal.id}">
+          <div class="meal-header">
+            <button class="close-btn" onclick="event.stopPropagation(); closeRecipe(${meal.id});">&times;</button>
+            <span class="badge badge-${meal.timing === 'day-before' ? 'day-before' : 'same-day'}">
+              ${meal.timing === 'day-before' ? 'Day-before ★' : 'Same-day ✓'}
+            </span>
+            <h3>${meal.id}. ${meal.name}</h3>
+            <div class="meal-summary">
+              <span><span class="label">Protein:</span> ${meal.protein}</span>
+              <span><span class="label">Method:</span> ${meal.method}</span>
+              ${meal.ip ? `<span class="ip-badge">IP ${meal.ip === 'partial' ? 'partial' : 'friendly'}</span>` : ''}
+            </div>
+            <div class="meal-actions">
+              <button class="btn-add-week" onclick="event.stopPropagation(); toggleMealSelection(${meal.id});">
+                ${selectedMeals.includes(meal.id) ? '✓ In Plan' : '+ Add to Week'}
+              </button>
+              <button class="btn-view-recipe" onclick="event.stopPropagation(); toggleRecipe(${meal.id});">View Recipe</button>
+            </div>
+          </div>
+          <div class="meal-details">
+            <div class="meal-details-inner">
+              <div class="ingredients">
+                <h4>Ingredients</h4>
+                <ul>
+                  ${meal.ingredients.map(ing => `
+                    <li><span>${ing.name}</span><span class="amount">${ing.amount}</span></li>
+                  `).join('')}
+                </ul>
+              </div>
+              <div class="instructions">
+                <h4>Instructions</h4>
+                <ol>
+                  ${meal.instructions.map(step => `<li>${step}</li>`).join('')}
+                </ol>
+              </div>
+              <div class="tip ${meal.tipType === 'ip' ? 'ip-tip' : ''}">
+                <strong>${meal.tipType === 'ip' ? 'Instant Pot:' : 'Tip:'}</strong> ${meal.tip.replace(/^[^:]+:\s*/, '')}
+              </div>
+            </div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function renderWeekPlanner() {
+      const container = document.getElementById('week-meals');
+
+      if (selectedMeals.length === 0) {
+        container.innerHTML = '<p class="week-planner-empty">Click "+ Add to Week" on meals below to build your plan</p>';
+        return;
+      }
+
+      const selected = meals.filter(m => selectedMeals.includes(m.id));
+      const totalProtein = selected.reduce((sum, m) => {
+        const match = m.protein.match(/(\d+)/);
+        return sum + (match ? parseInt(match[1]) : 0);
+      }, 0);
+
+      container.innerHTML = `
+        <div class="week-planner-meals">
+          ${selected.map(meal => `
+            <span class="week-meal-chip">
+              ${meal.name.split('(')[0].trim()}
+              <button class="remove-meal" onclick="toggleMealSelection(${meal.id})">&times;</button>
+            </span>
+          `).join('')}
+        </div>
+        <div class="week-stats">
+          <span><strong>${selected.length}</strong> meals selected</span>
+          <span>~<strong>${totalProtein}g</strong> total protein</span>
+          <button class="clear-week" onclick="clearWeek()">Clear All</button>
+        </div>
+      `;
+    }
+
+    function renderShoppingList() {
+      const container = document.getElementById('shopping-list-content');
+      const countSpan = document.getElementById('shopping-count');
+
+      if (selectedMeals.length === 0) {
+        container.innerHTML = `
+          <div class="shopping-empty">
+            <div class="shopping-empty-icon">🛒</div>
+            <p>Select meals above to generate your shopping list</p>
+          </div>
+        `;
+        countSpan.textContent = '';
+        return;
+      }
+
+      // Aggregate ingredients
+      const ingredientMap = {};
+      const selected = meals.filter(m => selectedMeals.includes(m.id));
+
+      selected.forEach(meal => {
+        meal.ingredients.forEach(ing => {
+          const key = ing.name.toLowerCase();
+          if (!ingredientMap[key]) {
+            ingredientMap[key] = {
+              name: ing.name,
+              amounts: [],
+              category: ing.category,
+              meals: []
+            };
+          }
+          ingredientMap[key].amounts.push(ing.amount);
+          ingredientMap[key].meals.push(meal.name.split('(')[0].split('+')[0].trim());
+        });
+      });
+
+      // Group by category
+      const categories = {
+        proteins: { name: 'Proteins', items: [] },
+        dairy: { name: 'Dairy & Protein Boosters', items: [] },
+        carbs: { name: 'Carbs & Starches', items: [] },
+        legumes: { name: 'Legumes & Beans', items: [] },
+        produce: { name: 'Produce', items: [] },
+        herbs: { name: 'Herbs & Spices', items: [] },
+        pantry: { name: 'Pantry Staples', items: [] },
+        nutbutters: { name: 'Nut Butters', items: [] }
+      };
+
+      Object.values(ingredientMap).forEach(ing => {
+        const cat = categories[ing.category] || categories.pantry;
+        cat.items.push(ing);
+      });
+
+      // Count total items
+      const totalItems = Object.values(ingredientMap).length;
+      countSpan.textContent = `(${totalItems} items)`;
+
+      // Render
+      const categoryHTML = Object.entries(categories)
+        .filter(([_, cat]) => cat.items.length > 0)
+        .map(([key, cat]) => `
+          <div class="shopping-category">
+            <h4>${cat.name}</h4>
+            <ul>
+              ${cat.items.map(ing => {
+                const itemKey = ing.name.toLowerCase().replace(/\s+/g, '-');
+                const isChecked = checkedItems[itemKey] || false;
+                const uniqueMeals = [...new Set(ing.meals)];
+                const amountDisplay = ing.amounts.length > 1
+                  ? ing.amounts.join(' + ')
+                  : ing.amounts[0];
+                return `
+                  <li>
+                    <label class="${isChecked ? 'checked' : ''}">
+                      <input type="checkbox" ${isChecked ? 'checked' : ''}
+                        onchange="toggleShoppingItem('${itemKey}', this)">
+                      <span>
+                        <span class="ingredient-amount">${amountDisplay}</span> ${ing.name}
+                        <span class="ingredient-meals">for: ${uniqueMeals.join(', ')}</span>
+                      </span>
+                    </label>
+                  </li>
+                `;
+              }).join('')}
+            </ul>
+          </div>
+        `).join('');
+
+      container.innerHTML = `
+        <div class="shopping-grid">
+          ${categoryHTML}
+        </div>
+        <div class="shopping-note">
+          <strong>Tip:</strong> Checked items are saved automatically. The list updates when you add/remove meals from your weekly plan.
+        </div>
+      `;
+    }
+
+    // ============================================
+    // EVENT HANDLERS
+    // ============================================
+    function toggleMealSelection(id) {
+      const index = selectedMeals.indexOf(id);
+      if (index > -1) {
+        selectedMeals.splice(index, 1);
+      } else {
+        selectedMeals.push(id);
+      }
+      localStorage.setItem('selectedMeals', JSON.stringify(selectedMeals));
+      renderMeals();
+      renderWeekPlanner();
+      renderShoppingList();
+    }
+
+    function clearWeek() {
+      selectedMeals = [];
+      checkedItems = {};
+      localStorage.setItem('selectedMeals', JSON.stringify(selectedMeals));
+      localStorage.setItem('checkedItems', JSON.stringify(checkedItems));
+      renderMeals();
+      renderWeekPlanner();
+      renderShoppingList();
+    }
+
+    function toggleRecipe(id) {
+      const card = document.querySelector(`.meal-card[data-id="${id}"]`);
+
+      // Close other expanded cards
+      document.querySelectorAll('.meal-card.expanded').forEach(c => {
+        if (c !== card) c.classList.remove('expanded');
+      });
+
+      card.classList.toggle('expanded');
+
+      if (card.classList.contains('expanded')) {
+        setTimeout(() => {
+          card.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }, 100);
+      }
+    }
+
+    function closeRecipe(id) {
+      const card = document.querySelector(`.meal-card[data-id="${id}"]`);
+      card.classList.remove('expanded');
+    }
+
+    function toggleShopping() {
+      const content = document.getElementById('shopping-content');
+      const toggle = document.getElementById('shopping-toggle');
+
+      if (content.classList.contains('expanded')) {
+        content.classList.remove('expanded');
+        toggle.innerHTML = '&#9662; Expand';
+      } else {
+        content.classList.add('expanded');
+        toggle.innerHTML = '&#9652; Collapse';
+      }
+    }
+
+    function toggleShoppingItem(key, checkbox) {
+      checkedItems[key] = checkbox.checked;
+      localStorage.setItem('checkedItems', JSON.stringify(checkedItems));
+      checkbox.parentElement.classList.toggle('checked', checkbox.checked);
+    }
+
+    // ============================================
+    // INITIALIZE
+    // ============================================
+    renderMeals();
+    renderWeekPlanner();
+    renderShoppingList();
+  </script>
+
+</body>
+</html>
