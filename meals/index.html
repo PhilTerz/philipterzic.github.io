@@ -534,6 +534,12 @@
       border-radius: 10px;
       padding: 16px;
       border-left: 3px solid #6BBF59;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .side-card:hover {
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
     }
 
     .side-header {
@@ -583,6 +589,31 @@
       margin: 0;
       padding-top: 8px;
       border-top: 1px solid #E8E8E8;
+    }
+
+    .side-action {
+      margin-top: 10px;
+      font-size: 11px;
+      font-weight: 600;
+      color: #6BBF59;
+      text-align: center;
+      padding: 6px;
+      background: rgba(107, 191, 89, 0.1);
+      border-radius: 6px;
+    }
+
+    .side-card.selected {
+      border-left-color: #4DA6A6;
+      background: #E8F5F5;
+    }
+
+    .side-card.selected .side-action {
+      background: #4DA6A6;
+      color: white;
+    }
+
+    .side-card.selected .side-fiber {
+      background: #4DA6A6;
     }
 
     .fiber-target {
@@ -871,61 +902,10 @@
   <!-- Fiber Sides Section -->
   <section class="fiber-sides">
     <h2>Fiber Boost Sides</h2>
-    <p class="fiber-intro">Add these to any meal to hit 50-60g+ fiber daily. Mix and match freely.</p>
+    <p class="fiber-intro">Click to add to shopping list. Mix and match to hit 50-60g+ fiber daily.</p>
 
-    <div class="sides-grid">
-      <div class="side-card">
-        <div class="side-header">
-          <h4>Raw Veggie Plate</h4>
-          <span class="side-fiber">+8-12g fiber</span>
-        </div>
-        <ul>
-          <li><strong>Carrots</strong> — 8 oz raw sticks (6g)</li>
-          <li><strong>Beets</strong> — 4 oz grated/sliced (2g)</li>
-          <li><strong>Bell peppers</strong> — 1 medium sliced (2g)</li>
-          <li><strong>Cucumber</strong> — ½ medium (1g)</li>
-        </ul>
-        <p class="side-note">Prep Sunday, store in water. Lasts 5 days.</p>
-      </div>
-
-      <div class="side-card">
-        <div class="side-header">
-          <h4>Berry Bowl</h4>
-          <span class="side-fiber">+8-12g fiber</span>
-        </div>
-        <ul>
-          <li><strong>Strawberries</strong> — 12 oz frozen (6g)</li>
-          <li><strong>Blueberries</strong> — 6 oz (3g)</li>
-          <li><strong>Raspberries</strong> — 4 oz (4g)</li>
-        </ul>
-        <p class="side-note">Frozen works great. Thaw 10 min or eat frozen.</p>
-      </div>
-
-      <div class="side-card">
-        <div class="side-header">
-          <h4>Power Nut Mix</h4>
-          <span class="side-fiber">+5-7g fiber</span>
-        </div>
-        <ul>
-          <li><strong>Walnuts</strong> — 1 oz / 28g (2g + omega-3)</li>
-          <li><strong>Almonds</strong> — 1 oz / 28g (3.5g)</li>
-          <li><strong>Brazil nuts</strong> — 3-4 nuts (1g + selenium)</li>
-        </ul>
-        <p class="side-note">~200 kcal, 6g protein. Daily limit: 2 oz total.</p>
-      </div>
-
-      <div class="side-card">
-        <div class="side-header">
-          <h4>Greens Side</h4>
-          <span class="side-fiber">+4-8g fiber</span>
-        </div>
-        <ul>
-          <li><strong>Collard greens</strong> — 6 oz steamed (5g)</li>
-          <li><strong>Spinach</strong> — 3 cups raw (2g)</li>
-          <li><strong>Mushrooms</strong> — 8 oz raw/sautéed (3g)</li>
-        </ul>
-        <p class="side-note">Steam collards 3-4 min. Don't overcook.</p>
-      </div>
+    <div class="sides-grid" id="sides-grid">
+      <!-- Rendered by JavaScript -->
     </div>
 
     <div class="fiber-target">
@@ -1421,9 +1401,71 @@
     ];
 
     // ============================================
+    // FIBER SIDES DATA
+    // ============================================
+    const sides = [
+      {
+        id: 's1',
+        name: 'Raw Veggie Plate',
+        fiber: '+8-12g',
+        ingredients: [
+          { name: 'Carrots', amount: '8 oz', category: 'produce' },
+          { name: 'Beets', amount: '4 oz', category: 'produce' },
+          { name: 'Bell pepper, red', amount: '1 medium', category: 'produce' },
+          { name: 'Cucumber', amount: '½ medium', category: 'produce' },
+        ],
+        note: 'Prep Sunday, store in water. Lasts 5 days.'
+      },
+      {
+        id: 's2',
+        name: 'Berry Bowl',
+        fiber: '+8-12g',
+        ingredients: [
+          { name: 'Strawberries (frozen)', amount: '12 oz', category: 'produce' },
+          { name: 'Blueberries', amount: '6 oz', category: 'produce' },
+          { name: 'Raspberries', amount: '4 oz', category: 'produce' },
+        ],
+        note: 'Frozen works great. Thaw 10 min or eat frozen.'
+      },
+      {
+        id: 's3',
+        name: 'Power Nut Mix',
+        fiber: '+5-7g',
+        ingredients: [
+          { name: 'Walnuts', amount: '1 oz (28g)', category: 'nuts' },
+          { name: 'Almonds', amount: '1 oz (28g)', category: 'nuts' },
+          { name: 'Brazil nuts', amount: '3-4 nuts', category: 'nuts' },
+        ],
+        note: '~200 kcal, 6g protein. Daily limit: 2 oz total.'
+      },
+      {
+        id: 's4',
+        name: 'Low-PUFA Nut Mix',
+        fiber: '+4-5g',
+        ingredients: [
+          { name: 'Macadamia nuts', amount: '1 oz (28g)', category: 'nuts' },
+          { name: 'Hazelnuts', amount: '1 oz (28g)', category: 'nuts' },
+          { name: 'Brazil nuts', amount: '3-4 nuts', category: 'nuts' },
+        ],
+        note: 'Lower omega-6. Get omega-3 from sardines instead.'
+      },
+      {
+        id: 's5',
+        name: 'Greens Side',
+        fiber: '+4-8g',
+        ingredients: [
+          { name: 'Collard greens', amount: '6 oz', category: 'produce' },
+          { name: 'Mushrooms', amount: '8 oz', category: 'produce' },
+        ],
+        note: 'Steam collards 3-4 min. Don\'t overcook.'
+      }
+    ];
+
+    // ============================================
     // STATE
     // ============================================
     let selectedMeals = JSON.parse(localStorage.getItem('selectedMeals') || '[]');
+    let selectedSides = JSON.parse(localStorage.getItem('selectedSides') || '[]');
     let checkedItems = JSON.parse(localStorage.getItem('checkedItems') || '{}');
 
     // ============================================
@@ -1508,26 +1550,45 @@
       `;
     }
 
+    function renderSides() {
+      const grid = document.getElementById('sides-grid');
+      grid.innerHTML = sides.map(side => `
+        <div class="side-card ${selectedSides.includes(side.id) ? 'selected' : ''}" data-id="${side.id}" onclick="toggleSideSelection('${side.id}')">
+          <div class="side-header">
+            <h4>${side.name}</h4>
+            <span class="side-fiber">${side.fiber} fiber</span>
+          </div>
+          <ul>
+            ${side.ingredients.map(ing => `<li><strong>${ing.name}</strong> — ${ing.amount}</li>`).join('')}
+          </ul>
+          <p class="side-note">${side.note}</p>
+          <div class="side-action">
+            ${selectedSides.includes(side.id) ? '✓ Added' : '+ Add to List'}
+          </div>
+        </div>
+      `).join('');
+    }
+
     function renderShoppingList() {
       const container = document.getElementById('shopping-list-content');
       const countSpan = document.getElementById('shopping-count');
 
-      if (selectedMeals.length === 0) {
+      if (selectedMeals.length === 0 && selectedSides.length === 0) {
         container.innerHTML = `
           <div class="shopping-empty">
             <div class="shopping-empty-icon">🛒</div>
-            <p>Select meals above to generate your shopping list</p>
+            <p>Select meals or sides above to generate your shopping list</p>
           </div>
         `;
         countSpan.textContent = '';
         return;
       }
 
-      // Aggregate ingredients
+      // Aggregate ingredients from meals
       const ingredientMap = {};
-      const selected = meals.filter(m => selectedMeals.includes(m.id));
+      const selectedMealsList = meals.filter(m => selectedMeals.includes(m.id));
 
-      selected.forEach(meal => {
+      selectedMealsList.forEach(meal => {
         meal.ingredients.forEach(ing => {
           const key = ing.name.toLowerCase();
           if (!ingredientMap[key]) {
@@ -1540,6 +1601,25 @@
           }
           ingredientMap[key].amounts.push(ing.amount);
           ingredientMap[key].meals.push(meal.name.split('(')[0].split('+')[0].trim());
+        });
+      });
+
+      // Aggregate ingredients from sides
+      const selectedSidesList = sides.filter(s => selectedSides.includes(s.id));
+
+      selectedSidesList.forEach(side => {
+        side.ingredients.forEach(ing => {
+          const key = ing.name.toLowerCase();
+          if (!ingredientMap[key]) {
+            ingredientMap[key] = {
+              name: ing.name,
+              amounts: [],
+              category: ing.category,
+              meals: []
+            };
+          }
+          ingredientMap[key].amounts.push(ing.amount);
+          ingredientMap[key].meals.push(side.name);
         });
       });
 
@@ -1622,12 +1702,27 @@
       renderShoppingList();
     }
 
+    function toggleSideSelection(id) {
+      const index = selectedSides.indexOf(id);
+      if (index > -1) {
+        selectedSides.splice(index, 1);
+      } else {
+        selectedSides.push(id);
+      }
+      localStorage.setItem('selectedSides', JSON.stringify(selectedSides));
+      renderSides();
+      renderShoppingList();
+    }
+
     function clearWeek() {
       selectedMeals = [];
+      selectedSides = [];
       checkedItems = {};
       localStorage.setItem('selectedMeals', JSON.stringify(selectedMeals));
+      localStorage.setItem('selectedSides', JSON.stringify(selectedSides));
       localStorage.setItem('checkedItems', JSON.stringify(checkedItems));
       renderMeals();
+      renderSides();
       renderWeekPlanner();
       renderShoppingList();
     }
@@ -1673,6 +1768,7 @@
     // INITIALIZE
     // ============================================
     renderMeals();
+    renderSides();
     renderWeekPlanner();
     renderShoppingList();
   </script>
