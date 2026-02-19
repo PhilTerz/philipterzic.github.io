@@ -1469,8 +1469,8 @@
     // MEAL SECTIONS
     // ============================================
     const mealSections = [
-      { id: 'morning', name: 'Morning Bowls', subtitle: 'Sweet or savory starts — no stove or just gentle heat', meals: [4, 11, 16, 17, 20] },
-      { id: 'light', name: 'Light & Fresh', subtitle: 'Cold plates, salads, quick assembly', meals: [1, 10, 18, 19] },
+      { id: 'morning', name: 'Morning Bowls', subtitle: 'Sweet or savory starts — no stove or just gentle heat', meals: [1, 4, 11, 16, 17, 20] },
+      { id: 'light', name: 'Light & Fresh', subtitle: 'Cold plates, salads, quick assembly', meals: [10, 18, 19] },
       { id: 'mains', name: 'Simple Mains', subtitle: 'Solid protein + starch — steamed, poached, braised', meals: [2, 3, 5, 6, 7, 14] },
       { id: 'hearty', name: 'Hearty Pots', subtitle: 'Stews, soups, daals — big batch, high fiber', meals: [8, 9, 12, 13, 15] },
     ];
@@ -1550,7 +1550,7 @@
       return `
         <div class="meal-card ${selectedMeals.includes(meal.id) ? 'selected' : ''}" data-id="${meal.id}" onclick="toggleRecipe(${meal.id})">
           <div class="meal-header">
-            <h3>${meal.id}. ${meal.name}</h3>
+            <h3>${meal.name}</h3>
             <div class="meal-summary">
               <span><span class="label">Protein:</span> ${meal.protein}</span>
               <span><span class="label">Fiber:</span> ${meal.fiber}</span>
