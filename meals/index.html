@@ -130,106 +130,11 @@
       background: rgba(255,255,255,0.3);
     }
 
-    .collections-toolbar {
-      background: white;
-      border: 1px solid #E0E0E0;
-      border-radius: 12px;
-      padding: 18px 20px;
-      margin-bottom: 16px;
-    }
-
-    .collections-toolbar h2 {
-      font-size: 13px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      color: #1a1a1a;
-      margin-bottom: 6px;
-    }
-
-    .collections-subtitle {
-      font-size: 12px;
-      color: #666;
-      margin-bottom: 12px;
-    }
-
-    .collections-chip-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-    }
-
-    .collection-chip {
-      border: 1px solid #DADADA;
-      background: #FAFAFA;
-      color: #555;
-      border-radius: 999px;
-      padding: 6px 12px;
-      font-size: 11px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.2s ease;
-    }
-
-    .collection-chip:hover {
-      border-color: #BDBDBD;
-      background: #F3F3F3;
-    }
-
-    .collection-chip.active {
-      border-color: #4DA6A6;
-      color: #2E7C7C;
-      background: #E8F5F5;
-    }
-
     .meals-grid {
-      margin-bottom: 32px;
-    }
-
-    .theme-section {
-      background: white;
-      border: 1px solid #E2E2E2;
-      border-radius: 12px;
-      padding: 18px;
-      margin-bottom: 16px;
-    }
-
-    .theme-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      gap: 12px;
-      margin-bottom: 14px;
-    }
-
-    .theme-header h3 {
-      font-size: 15px;
-      font-weight: 700;
-      margin-bottom: 4px;
-      color: #1f1f1f;
-    }
-
-    .theme-header p {
-      font-size: 12px;
-      color: #666;
-    }
-
-    .theme-count {
-      font-size: 10px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.6px;
-      color: #4DA6A6;
-      background: #E8F5F5;
-      border-radius: 999px;
-      padding: 5px 10px;
-      white-space: nowrap;
-    }
-
-    .theme-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 16px;
+      margin-bottom: 32px;
     }
 
     .meal-card {
@@ -884,14 +789,11 @@
       body {
         padding: 16px;
       }
-      .theme-grid {
+      .meals-grid {
         grid-template-columns: 1fr;
       }
       .meal-card.expanded {
         grid-column: span 1;
-      }
-      .theme-header {
-        flex-direction: column;
       }
       .meal-details-inner {
         grid-template-columns: 1fr;
@@ -918,7 +820,7 @@
       .meal-card {
         break-inside: avoid;
       }
-      .week-planner, .meal-actions, .collections-toolbar {
+      .week-planner, .meal-actions {
         display: none;
       }
     }
@@ -937,10 +839,6 @@
     <div id="week-meals">
       <p class="week-planner-empty">Click "Add to Week" on meals below to build your plan</p>
     </div>
-  </section>
-
-  <section class="collections-toolbar" id="meal-collections">
-    <!-- Collection filters rendered by JavaScript -->
   </section>
 
   <section class="meals-grid" id="meals-grid">
@@ -1531,60 +1429,6 @@
     ];
 
     // ============================================
-    // MEAL COLLECTIONS
-    // ============================================
-    const collections = [
-      {
-        id: 'all',
-        name: 'All Collections',
-        description: 'Show every recipe grouped by use-case.'
-      },
-      {
-        id: 'pre-workout-sweet',
-        name: 'Pre-Workout Sweet',
-        description: 'Carb-forward, easy-digest breakfasts you can actually look forward to.'
-      },
-      {
-        id: 'savory-protein',
-        name: 'Savory Protein',
-        description: 'High-protein savory meals with gentle cooking methods.'
-      },
-      {
-        id: 'fiber-forward',
-        name: 'Fiber-Forward',
-        description: 'High-fiber options built around legumes and big produce volume.'
-      },
-      {
-        id: 'batch-reheat',
-        name: 'Batch + Reheat',
-        description: 'Meal-prep friendly options that hold up across the week.'
-      }
-    ];
-
-    const mealCollections = {
-      1: 'savory-protein',
-      2: 'savory-protein',
-      3: 'batch-reheat',
-      4: 'pre-workout-sweet',
-      5: 'savory-protein',
-      6: 'batch-reheat',
-      7: 'fiber-forward',
-      8: 'batch-reheat',
-      9: 'fiber-forward',
-      10: 'fiber-forward',
-      11: 'pre-workout-sweet',
-      12: 'fiber-forward',
-      13: 'batch-reheat',
-      14: 'batch-reheat',
-      15: 'batch-reheat',
-      16: 'batch-reheat',
-      17: 'savory-protein',
-      18: 'fiber-forward',
-      19: 'fiber-forward',
-      20: 'pre-workout-sweet'
-    };
-
-    // ============================================
     // FIBER SIDES DATA
     // ============================================
     const sides = [
@@ -1651,21 +1495,13 @@
     let selectedMeals = JSON.parse(localStorage.getItem('selectedMeals') || '[]');
     let selectedSides = JSON.parse(localStorage.getItem('selectedSides') || '[]');
     let checkedItems = JSON.parse(localStorage.getItem('checkedItems') || '{}');
-    let activeCollection = localStorage.getItem('activeCollection') || 'all';
-
-    if (!collections.some(c => c.id === activeCollection)) {
-      activeCollection = 'all';
-    }
 
     // ============================================
     // RENDER FUNCTIONS
     // ============================================
-    function getMealCollectionId(mealId) {
-      return mealCollections[mealId] || 'savory-protein';
-    }
-
-    function renderMealCard(meal) {
-      return `
+    function renderMeals() {
+      const grid = document.getElementById('meals-grid');
+      grid.innerHTML = meals.map(meal => `
         <div class="meal-card ${selectedMeals.includes(meal.id) ? 'selected' : ''}" data-id="${meal.id}" onclick="toggleRecipe(${meal.id})">
           <div class="meal-header">
             <h3>${meal.id}. ${meal.name}</h3>
@@ -1703,65 +1539,7 @@
             </div>
           </div>
         </div>
-      `;
-    }
-
-    function renderCollectionToolbar() {
-      const toolbar = document.getElementById('meal-collections');
-      toolbar.innerHTML = `
-        <h2>Recipe Collections</h2>
-        <p class="collections-subtitle">Group recipes by purpose, then click a collection to focus your choices.</p>
-        <div class="collections-chip-row">
-          ${collections.map(collection => {
-            const count = collection.id === 'all'
-              ? meals.length
-              : meals.filter(meal => getMealCollectionId(meal.id) === collection.id).length;
-            return `
-              <button
-                class="collection-chip ${activeCollection === collection.id ? 'active' : ''}"
-                onclick="setMealCollection('${collection.id}')"
-                aria-pressed="${activeCollection === collection.id}">
-                ${collection.name} (${count})
-              </button>
-            `;
-          }).join('')}
-        </div>
-      `;
-    }
-
-    function renderMeals() {
-      renderCollectionToolbar();
-
-      const grid = document.getElementById('meals-grid');
-      const visibleCollections = activeCollection === 'all'
-        ? collections.filter(collection => collection.id !== 'all')
-        : collections.filter(collection => collection.id === activeCollection);
-
-      const sectionsHTML = visibleCollections.map(collection => {
-        const themedMeals = meals.filter(meal => getMealCollectionId(meal.id) === collection.id);
-        if (themedMeals.length === 0) return '';
-
-        return `
-          <section class="theme-section" id="collection-${collection.id}">
-            <div class="theme-header">
-              <div>
-                <h3>${collection.name}</h3>
-                <p>${collection.description}</p>
-              </div>
-              <span class="theme-count">${themedMeals.length} meals</span>
-            </div>
-            <div class="theme-grid">
-              ${themedMeals.map(renderMealCard).join('')}
-            </div>
-          </section>
-        `;
-      }).join('');
-
-      grid.innerHTML = sectionsHTML || `
-        <section class="theme-section">
-          <p class="collections-subtitle">No recipes in this collection yet.</p>
-        </section>
-      `;
+      `).join('');
     }
 
     function renderWeekPlanner() {
@@ -1939,12 +1717,6 @@
     // ============================================
     // EVENT HANDLERS
     // ============================================
-    function setMealCollection(collectionId) {
-      activeCollection = collectionId;
-      localStorage.setItem('activeCollection', activeCollection);
-      renderMeals();
-    }
-
     function toggleMealSelection(id) {
       const index = selectedMeals.indexOf(id);
       if (index > -1) {
